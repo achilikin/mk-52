@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${env:ST_PATH}/include/**"
+            ],
+			// copy USE_HAL_DRIVER and STM32F103xB here to avoid problems with uint32_t define
+            "defines": [
+				"USART_TO_USE=3",
+				"USE_HAL_DRIVER",
+				"STM32F103xB",
+				"__C_ARM"
+            ],
+			"compilerPath": "${env:GCC_PATH}/arm-none-eabi-gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "gcc-arm"
+        }
+    ],
+    "version": 4
+}
