@@ -73,9 +73,12 @@ void oled_set_font_color(uint8_t color)
 	 * convert 4 bit grayscale to 32 bit mask for font
 	 * font stores color as 0x0F, so mask can convert it to any color
 	 */
-	font_color = (color << 24) | (color << 16) | (color << 8) | color;
-	/* force re-drawing of the frame buffer */
-	memset(oled_sym, SYM_SPACE, sizeof(oled_sym));
+	uint32_t new_color = (color << 24) | (color << 16) | (color << 8) | color;
+	if (new_color != font_color) {
+		font_color = new_color;
+		/* force re-drawing of the frame buffer */
+		memset(oled_sym, SYM_MAX, sizeof(oled_sym));
+	}
 }
 
 void oled_clear_ram(uint8_t fill)
@@ -95,7 +98,7 @@ void oled_clear_frame(uint8_t fill)
 {
 	fill = (fill & 0x0F) | (fill << 4);
 	memset(oled_frame, fill, sizeof(oled_frame));
-	memset(oled_sym, SYM_SPACE, sizeof(oled_sym));
+	memset(oled_sym, SYM_MAX, sizeof(oled_sym));
 	return;
 }
 

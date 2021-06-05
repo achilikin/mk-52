@@ -35,8 +35,13 @@ extern "C" {
 #define OLED_SYM_OFFSET 14 /* the first column of the first digit */
 #define OLED_DOT_OFFSET 18 /* dot position offset within a symbol */
 
-#define OLED_DEFAULT_FONT_COLOR 0x07
-#define OLED_DEFAULT_BKG_COLOR  0x00
+#define OLED_COLOR_BLACK 0x00
+#define OLED_COLOR_DIM   0x01
+#define OLED_COLOR_GRAY  0x07
+#define OLED_COLOR_WHITE 0x0F
+
+#define OLED_DEFAULT_FONT_COLOR OLED_COLOR_GRAY
+#define OLED_DEFAULT_BKG_COLOR  OLED_COLOR_BLACK
 
 enum MK52_SYM {
 	SYM_SPACE,
