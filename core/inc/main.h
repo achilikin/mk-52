@@ -63,17 +63,24 @@ void SystemClock_Config(void);
 #define DBG_Pin GPIO_PIN_12
 #define DBG_GPIO_Port GPIOA
 
-#define SPI_DA_Pin GPIO_PIN_12
-#define SPI_CS_Pin GPIO_PIN_14
+#define OLED_DC_Pin GPIO_PIN_12
+#define OLED_CS_Pin GPIO_PIN_14
+#define OLED_RST_Pin GPIO_PIN_3
 
-#define SPI_DA_GPIO_Port GPIOB
-#define SPI_CS_GPIO_Port GPIOB
+#define OLED_DC_GPIO_Port GPIOB
+#define OLED_CS_GPIO_Port GPIOB
+#define OLED_RST_GPIO_Port GPIOB
 
-extern volatile uint32_t scan_period; /** interval between scan pin interrupts, in sys clocks */
-volatile uint32_t tim_arr;			  /** timer auto reload register */
+extern volatile uint32_t vfd_scan_period; /** interval between scan pin interrupts, in sys clocks */
+extern volatile uint32_t vfd_curr_arr;	  /** timer auto reload register for current scan period */
+extern volatile uint32_t vfd_tim_arr;	  /** timer auto reload register modified by timer */
+extern volatile uint32_t vfd_wd;		  /** wfd watchdog timer, scan interrupt resets it to 0 */
 
-#define APP_PRINT_HEX_SCAN 0x01 /** print hex scan codes */
-#define APP_PRINT_KEY_SCAN 0x02 /** print changes in key scans */
+#define VFD_WD_TIMEOUT 100 /** wfd watchdog timer interval in msec */
+
+#define APP_PRINT_ENABLE   0x01 /** enable debug output to serial port */
+#define APP_PRINT_HEX_SCAN 0x02 /** print hex scan codes */
+#define APP_PRINT_KEY_SCAN 0x04 /** print changes in key scans */
 
 extern uint8_t app_flags;
 

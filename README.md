@@ -9,8 +9,21 @@
 # Used components
 
 * Elektronika MK-52, 1990, bad display
-* Elektronika MK-52, 1993, working display
-* SMT32F103C8T6 (Robodyn Bluepill)
+* Elektronika MK-52, 1993, working display for tests
+* SMT32F103C8T6 (Robodyn Bluepill) to scan MK-52 VFD
+* 256x64 SH1122 based OLED to replace MK-52 VFD
+
+So we can go from this (the minus sign and the first digit '1' are almost invisible in real life):
+
+![vfd-failing](./img/mk-52-vfd-failing.png)
+
+to this:
+
+![mk-52-oled](./img/mk-52-oled.png)
+
+and finaly to this:
+
+![mk-52-oled-green](./img/mk-52-oled-green.png)
 
 # Pinouts, wiring and output
 

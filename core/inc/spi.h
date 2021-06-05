@@ -31,7 +31,8 @@ extern "C" {
 
 /* USER CODE END Includes */
 
-extern SPI_HandleTypeDef hspi2;
+extern SPI_HandleTypeDef hspi;
+extern SPI_TypeDef *spi;
 
 /* USER CODE BEGIN Private defines */
 

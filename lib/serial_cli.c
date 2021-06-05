@@ -40,6 +40,48 @@ int8_t str_is(const char *str, const char *cmd)
 	return 0;
 }
 
+uint16_t argtou(char *arg, char **end)
+{
+	uint8_t digit;
+	uint16_t val = 0;
+
+	if ((arg[0] == '0') && (arg[1] == 'x'))
+		arg++;
+	if (*arg == 'x') {
+		arg++;
+		while (*arg > ' ') {
+			digit = *arg;
+			if ((digit >= 'A') && (digit <= 'F'))
+				digit = digit - 'A' + 10;
+			else if ((digit >= 'a') && (digit <= 'f'))
+				digit = digit - 'a' + 10;
+			else if ((digit >= '0') && (digit <= '9'))
+				digit = digit - '0';
+			else
+				goto retval;
+			val = (val << 4) | digit;
+			arg++;
+		}
+	} else {
+		while (*arg > ' ') {
+			digit = *arg;
+			if ((digit >= '0') && (digit <= '9'))
+				digit = digit - '0';
+			else
+				break;
+			val = val * 10 + digit;
+			arg++;
+		}
+	}
+
+retval:
+	while (*arg && *arg <= ' ')
+		arg++;
+	*end = arg;
+	return val;
+}
+
+
 static uint8_t  cursor;
 static char cmd[CMD_LEN + 1];
 static char hist[CMD_LEN + 1];

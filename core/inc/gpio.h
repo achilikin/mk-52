@@ -64,24 +64,24 @@ static inline void led_marker100(void) {
 	LED_PIN_GPIO_Port->BSRR = LED_PIN_Pin;
 }
 
-/* use USB D+ (4.7K pull-up) pin for debugging */
+/* use A12 USB D+ (4.7K pull-up) pin for debugging */
 /** turn USB D+ pin HIGH (default) */
 static inline void dbg_high(void) {
 	DBG_GPIO_Port->BSRR = DBG_Pin;
 }
 
-/** turn USB D+ pin LOW */
+/** turn A12 USB D+ pin LOW */
 static inline void dbg_low(void) {
 	DBG_GPIO_Port->BSRR = (uint32_t)(DBG_Pin) << 16u;
 }
 
-/** turn USB D+ pin LOW for about 30ns (for sys clock 72MHz) */
+/** turn A12 USB D+ pin LOW for about 30ns (for sys clock 72MHz) */
 static inline void dbg_marker(void) {
 	DBG_GPIO_Port->BSRR = (uint32_t)(DBG_Pin) << 16u;
 	DBG_GPIO_Port->BSRR = DBG_Pin;
 }
 
-/** turn USB D+ pin LOW for about 100ns (for sys clock 72MHz) */
+/** turn A12 USB D+ pin LOW for about 100ns (for sys clock 72MHz) */
 static inline void dbg_marker100(void) {
 	DBG_GPIO_Port->BSRR = (uint32_t)(DBG_Pin) << 16u;
 	asm volatile("nop");

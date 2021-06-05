@@ -60,7 +60,8 @@ core/src/cli.c \
 core/src/tim.c \
 lib/serial.c \
 lib/serial_cli.c \
-lib/ticker.c
+lib/ticker.c \
+lib/oled.c
 
 # ASM sources
 ASM_SOURCES =  \

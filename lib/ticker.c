@@ -22,3 +22,18 @@ uint32_t delay_usec_init(void)
 
 	return clocks_per_usec;
 }
+
+void ticker_init(ticker_t *tick, uint32_t interval)
+{
+	tick->interval = interval;
+	tick->last_time = 0;
+}
+
+uint32_t ticker_tick(ticker_t *tick) {
+	uint32_t msec = millis();
+	if ((msec - tick->last_time) >= tick->interval) {
+		tick->last_time = msec;
+		return msec;
+	}
+	return 0;
+}

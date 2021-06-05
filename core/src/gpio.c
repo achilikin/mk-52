@@ -44,19 +44,20 @@ void MX_GPIO_Init(void)
 	/* Configure GPIO pins Output Levels */
 	HAL_GPIO_WritePin(DBG_GPIO_Port, DBG_Pin, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(LED_PIN_GPIO_Port, LED_PIN_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(SPI_DA_GPIO_Port, SPI_DA_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(SPI_CS_GPIO_Port, SPI_CS_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(OLED_DC_GPIO_Port,  OLED_DC_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(OLED_CS_GPIO_Port,  OLED_CS_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(OLED_RST_GPIO_Port, OLED_RST_Pin, GPIO_PIN_SET);
 
 	/* Configure GPIO output pins: LED pin and USB D+ pin*/
 	GPIO_InitStruct.Pin = LED_PIN_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH; /* all pins will use High speed */
 	HAL_GPIO_Init(LED_PIN_GPIO_Port, &GPIO_InitStruct);
+
 	GPIO_InitStruct.Pin = DBG_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
 	HAL_GPIO_Init(DBG_GPIO_Port, &GPIO_InitStruct);
 
 	/* Configure GPIO SEGMENTs pins */
@@ -72,12 +73,11 @@ void MX_GPIO_Init(void)
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	HAL_GPIO_Init(SCAN_GPIO_Port, &GPIO_InitStruct);
 
-	/* Configure GPIO SPI CS and DA pins */
-	GPIO_InitStruct.Pin = SPI_DA_Pin | SPI_CS_Pin;
+	/* Configure GPIO OLED CS, DC and RST pins */
+	GPIO_InitStruct.Pin = OLED_DC_Pin | OLED_CS_Pin | OLED_RST_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	HAL_GPIO_Init(OLED_DC_GPIO_Port, &GPIO_InitStruct);
 
 	/* EXTI interrupt init for GRID_8 pin */
 	HAL_NVIC_SetPriority(EXTI0_IRQn, 0, 0);

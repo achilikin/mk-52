@@ -32,6 +32,7 @@ int8_t cli_interact(cli_processor *process, void *ptr);
 char *get_arg(char *str);
 const char *is_on(uint8_t val);
 int8_t str_is(const char *str, const char *cmd);
+uint16_t argtou(char *arg, char **end);
 
 #ifdef __cplusplus
 }

@@ -8,6 +8,7 @@
 #include <stdbool.h>
 
 #include "main.h"
+#include "lib/oled.h"
 #include "lib/serial.h"
 #include "lib/serial_cli.h"
 
@@ -18,7 +19,15 @@ const char cmd_list[] =
 	"\n"
 	"reset\n"
 	"info\n"
-	"print hex|key on|off\n"
+	"print scan on|off\n" /* enable scan output to serial port */
+	"print hex on|off\n"  /* enable raw scan in hex */
+	"print key on|off\n"  /* enable keyboard scan codes */
+	"oled on|off\n"
+	"oled reset\n"
+	"oled clear [$color]\n" /* color 0x00 to 0x0F */
+	"oled font $color_value\n" /* 0: off, 15: max */
+	"oled line $start_line\n"  /* 0 to 63 */
+	"oled rotate on|off\n"
 ;
 
 int8_t cli(char *buf, void *ptr)
@@ -61,8 +70,8 @@ int8_t cli(char *buf, void *ptr)
 
 	if (str_is(cmd, "info")) {
 		serial_print("DWT counter is running at %u clocks per usec\n", clocks_per_usec);
-		serial_print("Scan cycle %u.%u msec\n", scan_period / 1000, scan_period % 1000);
-		serial_print("Timer period %u usec\n", tim_arr);
+		serial_print("Scan cycle %u.%u msec\n", vfd_scan_period / 1000, vfd_scan_period % 1000);
+		serial_print("Timer period %u usec\n", vfd_curr_arr);
 		serial_print("Printing of hex scan codes is %s\n", is_on(app_flags & APP_PRINT_HEX_SCAN));
 		serial_print("Printing of key scan codes is %s\n", is_on(app_flags & APP_PRINT_KEY_SCAN));
 		return CLI_EOK;
@@ -70,7 +79,9 @@ int8_t cli(char *buf, void *ptr)
 
 	if (str_is(cmd, "print")) {
 		uint8_t flag = 0;
-		if (str_is(arg, "hex"))
+		if (str_is(arg, "scan"))
+			flag = APP_PRINT_ENABLE;
+		else if (str_is(arg, "hex"))
 			flag = APP_PRINT_HEX_SCAN;
 		else if (str_is(arg, "key"))
 			flag = APP_PRINT_KEY_SCAN;
@@ -81,6 +92,62 @@ int8_t cli(char *buf, void *ptr)
 			app_flags |= flag;
 		else if (str_is(arg, "off"))
 			app_flags &= ~flag;
+		else
+			return CLI_EARG;
+		return CLI_EOK;
+	}
+
+	if (str_is(cmd, "oled")) {
+		if (str_is(arg, "font")) {
+			arg = get_arg(arg);
+			uint16_t color = argtou(arg, &arg);
+			if (color > 0x0F)
+				return CLI_EARG;
+			oled_set_font_color(color); /* will be used at the next frame flush */
+			return CLI_EOK;
+		}
+
+		if (str_is(arg, "line")) {
+			arg = get_arg(arg);
+			uint16_t line = argtou(arg, &arg);
+			if (line > 0x3F)
+				return CLI_EARG;
+			sh1122_set_start_line(line);
+			return CLI_EOK;
+		}
+
+		if (str_is(arg, "rotate")) {
+			arg = get_arg(arg);
+			if (str_is(arg, "on"))
+				oled_rotate(true);
+			else if (str_is(arg, "off"))
+				oled_rotate(false);
+			else
+				return CLI_EARG;
+			oled_flush_frame();
+			return CLI_EOK;
+		}
+
+		if (str_is(arg, "reset")) {
+			oled_init(OLED_DEFAULT_BKG_COLOR);
+			return CLI_EOK;
+		}
+
+		if (str_is(arg, "clear")) {
+			uint8_t fill = OLED_DEFAULT_BKG_COLOR;
+			arg = get_arg(arg);
+			if (*arg)
+				fill = argtou(arg, &arg);
+			if (fill > 0x0F)
+				return CLI_EARG;
+			oled_clear_ram(fill);
+			return CLI_EOK;
+		}
+
+		if (str_is(arg, "on"))
+			sh1122_set_oled_on(true);
+		else if (str_is(arg, "off"))
+			sh1122_set_oled_on(false);
 		else
 			return CLI_EARG;
 		return CLI_EOK;

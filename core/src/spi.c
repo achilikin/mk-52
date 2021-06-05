@@ -24,7 +24,8 @@
 
 /* USER CODE END 0 */
 
-SPI_HandleTypeDef hspi2;
+SPI_HandleTypeDef hspi;
+SPI_TypeDef *spi;
 
 /* SPI2 init function */
 void MX_SPI2_Init(void)
@@ -34,21 +35,21 @@ void MX_SPI2_Init(void)
 	/* USER CODE END SPI2_Init 0 */
 
 	/* USER CODE BEGIN SPI2_Init 1 */
-
+	spi = SPI2;
 	/* USER CODE END SPI2_Init 1 */
-	hspi2.Instance = SPI2;
-	hspi2.Init.Mode = SPI_MODE_MASTER;
-	hspi2.Init.Direction = SPI_DIRECTION_2LINES;
-	hspi2.Init.DataSize = SPI_DATASIZE_8BIT;
-	hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
-	hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
-	hspi2.Init.NSS = SPI_NSS_SOFT;
-	hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
-	hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
-	hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
-	hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
-	hspi2.Init.CRCPolynomial = 10;
-	if (HAL_SPI_Init(&hspi2) != HAL_OK) {
+	hspi.Instance = SPI2;
+	hspi.Init.Mode = SPI_MODE_MASTER;
+	hspi.Init.Direction = SPI_DIRECTION_2LINES;
+	hspi.Init.DataSize = SPI_DATASIZE_8BIT;
+	hspi.Init.CLKPolarity = SPI_POLARITY_LOW;
+	hspi.Init.CLKPhase = SPI_PHASE_1EDGE;
+	hspi.Init.NSS = SPI_NSS_SOFT;
+	hspi.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8; /* 4.5MHz, or 220ns clock cycle, SH1122 handles it fine */
+	hspi.Init.FirstBit = SPI_FIRSTBIT_MSB;
+	hspi.Init.TIMode = SPI_TIMODE_DISABLE;
+	hspi.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+	hspi.Init.CRCPolynomial = 10;
+	if (HAL_SPI_Init(&hspi) != HAL_OK) {
 		Error_Handler();
 	}
 	/* USER CODE BEGIN SPI2_Init 2 */

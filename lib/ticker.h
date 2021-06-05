@@ -17,6 +17,10 @@ static inline uint32_t millis(void) {
 	return uwTick;
 }
 
+static inline void delay(uint32_t msec){
+	HAL_Delay(msec);
+}
+
 /**
  * init Data Watchpoint & Trace (DWT) for microsecond delays
  * @return system clocks per microsecond or 0 if failed
@@ -51,6 +55,23 @@ static inline void tim_set_arr(TIM_TypeDef *tim, uint32_t arr) {
 	tim->EGR |= TIM_EGR_UG; /* latch new ARR value*/
 	tim->SR &= ~TIM_SR_UIF; /* reset the interrupt flag set by the previous line */
 }
+
+typedef struct ticker_s {
+	uint32_t interval;
+	uint32_t last_time;
+} ticker_t;
+
+void ticker_init(ticker_t *tick, uint32_t interval);
+
+static inline void ticker_clear(ticker_t *tick) {
+	tick->last_time = 0;
+}
+
+static inline void ticker_reset(ticker_t *tick) {
+	tick->last_time = millis();
+}
+
+uint32_t ticker_tick(ticker_t *tick);
 
 #ifdef __cplusplus
 }
