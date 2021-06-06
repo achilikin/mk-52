@@ -1,6 +1,6 @@
 <!-- omit in toc -->
-# Elektronika MK-52 (Электроника MK-52) VFD Scanner
-[MK-52 Elektronika](https://en.wikipedia.org/wiki/Elektronika_MK-52) Display Scanner
+# Elektronika MK-52 (Электроника MK-52) VFD Scanner for OLED display
+[MK-52 Elektronika](https://en.wikipedia.org/wiki/Elektronika_MK-52) VFD Scanner for OLED Display
 
 - [Used components](#used-components)
 - [Pinouts, wiring and output](#pinouts-wiring-and-output)
@@ -12,6 +12,7 @@
 * Elektronika MK-52, 1993, working display for tests
 * SMT32F103C8T6 (Robodyn Bluepill) to scan MK-52 VFD
 * 256x64 SH1122 based OLED to replace MK-52 VFD
+* B0505S-1W Isolating DC-DC
 
 So we can go from this (the minus sign and the first digit '1' are almost invisible in real life):
 
@@ -53,9 +54,19 @@ Serial Port output for ``12 x 4 = 48; 0 / 0 = ЕГГОГ; BП; Е.ГГОГ; B↑
 
 ![mk-52-terminal](./img/capture.png)
 
+Font sketchup:
+
+![mk-52-oled-font](./img/font.svg)
+
+Remember not to divide by zero, or you get:
+
+![mk-52-error](./img/error.png)
+
 # Reference
 
 [Making Elektronika MK-52 VFD scanner](http://achilikin.blogspot.com/2021/05/making-elektronika-mk-52-vfd-scanner.html)
+
+[Making OLED Display for Elektronika MK-52](http://achilikin.blogspot.com/2021/06/making-oled-display-for-elektronika-mk.html)
 
 [Infiltration into the Elektronika MK-52 Architecture](https://habr.com/ru/post/467501/)
 
