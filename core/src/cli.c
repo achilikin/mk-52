@@ -12,7 +12,7 @@
 #include "lib/serial.h"
 #include "lib/serial_cli.h"
 
-static const char version[] = "2021-05-23\n";
+static const char version[] = "2021-06-26\n";
 
 // list of supported commands
 const char cmd_list[] =
@@ -24,11 +24,26 @@ const char cmd_list[] =
 	"print key on|off\n"  /* enable keyboard scan codes */
 	"oled on|off\n"
 	"oled reset\n"
-	"oled clear [$color]\n" /* color 0x00 to 0x0F */
-	"oled font $color_value\n" /* 0: off, 15: max */
-	"oled line $start_line\n"  /* 0 to 63 */
+	"oled clear [$color]\n" 	/* color 0x00 to 0x0F */
+	"oled font $color_value\n" 	/* 0: off, 15: max */
+	"oled print $str\n" 		/* print a string of valid symbols */
+	"oled line $start_line\n"  	/* 0 to 63 */
 	"oled rotate on|off\n"
 ;
+
+/* mapping from a letter to a MK52 symbol */
+static const uint8_t let_sym[] = {
+	' ', '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+	'C', 'E', 'L', 'R', '{', 'F', 'P'};
+
+static uint8_t get_oled_sym(uint8_t letter)
+{
+	for (uint8_t i = 0; i < sizeof(let_sym); i++) {
+		if (letter == let_sym[i])
+			return i;
+	}
+	return SYM_SPACE;
+}
 
 int8_t cli(char *buf, void *ptr)
 {
@@ -141,6 +156,28 @@ int8_t cli(char *buf, void *ptr)
 			if (fill > 0x0F)
 				return CLI_EARG;
 			oled_clear_ram(fill);
+			return CLI_EOK;
+		}
+
+		if (str_is(arg, "print")) {
+			uint8_t i = 0, pos  = 0;
+			arg = get_arg(arg);
+			if (arg[0] == '-') {
+				i++;
+				oled_print(pos++, SYM_MINUS);
+			} else
+				oled_print(pos++, SYM_SPACE);
+			for (; arg[i] > ' '; i++) {
+				uint8_t sym = get_oled_sym(arg[i]);
+				if (arg[i+1] == '.') {
+					i++;
+					sym |= SEG_DOT;
+				}
+				oled_print(pos++, sym);
+			}
+			for (; pos < OLED_DIGITS; pos++)
+				oled_print(pos, SYM_SPACE);
+			oled_flush_frame();
 			return CLI_EOK;
 		}
 

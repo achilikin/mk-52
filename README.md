@@ -3,6 +3,7 @@
 [MK-52 Elektronika](https://en.wikipedia.org/wiki/Elektronika_MK-52) VFD Scanner for OLED Display
 
 - [Used components](#used-components)
+- [Command line](#command-line)
 - [Pinouts, wiring and output](#pinouts-wiring-and-output)
 - [Reference](#reference)
 
@@ -25,6 +26,37 @@ to this:
 and finaly to this:
 
 ![mk-52-oled-green](./img/mk-52-oled-green.png)
+
+# Command line
+
+Serial terminal can be connected at 38400 baud, the following commands are supported:
+
+```
+> help
+UID: 066FFF38-3739574D-FFFFFFFF
+Running at: 72000000
+Version: 2021-06-26
+Commands:
+    reset
+    info
+    print scan on|off
+    print hex on|off
+    print key on|off
+    oled on|off
+    oled reset
+    oled clear [$color]
+    oled font $color_value
+    oled print $str
+    oled line $start_line
+    oled rotate on|off```
+```
+
+Image size:
+
+```
+   text    data     bss     dec     hex filename
+  20660     120    7408   28188    6e1c build/mk-52.elf
+```
 
 # Pinouts, wiring and output
 
