@@ -48,7 +48,7 @@ Commands:
     oled font $color_value
     oled print $str
     oled line $start_line
-    oled rotate on|off```
+    oled rotate on|off
 ```
 
 Image size:
